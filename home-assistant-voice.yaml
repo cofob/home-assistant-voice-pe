@@ -22,8 +22,10 @@ substitutions:
   mute_switch_on_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/mute_switch_on.flac
   mute_switch_off_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/mute_switch_off.flac
   timer_finished_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/timer_finished.flac
-  wake_word_triggered_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/wake_word_triggered.flac
-  center_button_press_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/center_button_press.flac
+  wake_word_triggered_sound_file: https://github.com/cofob/home-assistant-voice-pe/raw/dev/sounds/start.flac
+  center_button_press_sound_file: https://github.com/cofob/home-assistant-voice-pe/raw/dev/sounds/start.flac
+  cancel_sound_file: https://github.com/cofob/home-assistant-voice-pe/raw/dev/sounds/cancel.flac
+  error_sound_file: https://github.com/cofob/home-assistant-voice-pe/raw/dev/sounds/error.flac
   center_button_double_press_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/center_button_double_press.flac
   center_button_triple_press_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/center_button_triple_press.flac
   center_button_long_press_sound_file: https://github.com/esphome/home-assistant-voice-pe/raw/dev/sounds/center_button_long_press.flac
@@ -1597,6 +1599,10 @@ audio_file:
     file: ${timer_finished_sound_file}
   - id: wake_word_triggered_sound
     file: ${wake_word_triggered_sound_file}
+  - id: cancel_sound
+    file: ${cancel_sound_file}
+  - id: error_sound
+    file: ${error_sound_file}
   - id: easter_egg_tick_sound
     file: ${easter_egg_tick_sound_file}
   - id: easter_egg_tada_sound
@@ -1745,15 +1751,24 @@ micro_wake_word:
                           else:
                             - if:
                                 condition:
-                                  switch.is_on: wake_sound
+                                  lambda: return !id(wifi_id).is_connected() || !id(api_id).is_connected();
                                 then:
                                   - script.execute:
                                       id: play_sound
                                       priority: true
-                                      sound_file: "wake_word_triggered_sound"
-                                  - delay: 300ms
-                            - voice_assistant.start:
-                                wake_word: !lambda return wake_word;
+                                      sound_file: "error_sound"
+                                else:
+                                  - if:
+                                      condition:
+                                        switch.is_on: wake_sound
+                                      then:
+                                        - script.execute:
+                                            id: play_sound
+                                            priority: true
+                                            sound_file: "wake_word_triggered_sound"
+                                        - delay: 300ms
+                                  - voice_assistant.start:
+                                      wake_word: !lambda return wake_word;
 
 select:
   - platform: template
@@ -1824,6 +1839,10 @@ voice_assistant:
         then:
           - lambda: id(voice_assistant_phase) = ${voice_assist_error_phase_id};
           - script.execute: control_leds
+          - script.execute:
+              id: play_sound
+              priority: true
+              sound_file: "error_sound"
     # If the error code is cloud-auth-failed, serve a local audio file guiding the user.
     - if:
         condition:
@@ -1892,6 +1911,10 @@ voice_assistant:
   on_timer_started:
     - script.execute: control_leds
   on_timer_cancelled:
+    - script.execute:
+        id: play_sound
+        priority: true
+        sound_file: "cancel_sound"
     - script.execute: control_leds
   on_timer_updated:
     - script.execute: control_leds
