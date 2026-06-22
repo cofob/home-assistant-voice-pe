@@ -1706,7 +1706,7 @@ micro_wake_word:
       id: hey_jarvis
     - model: hey_mycroft
       id: hey_mycroft
-    - model: models/hey_dom_ru.json
+    - model: github://cofob/home-assistant-voice-pe/models/hey_dom_ru.json@dev
       id: hey_dom_ru
     - model: https://github.com/kahrendt/microWakeWord/releases/download/stop/stop.json
       id: stop
