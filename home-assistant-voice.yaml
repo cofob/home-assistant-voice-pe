@@ -595,9 +595,7 @@ light:
           name: "Waiting for Command"
           update_interval: 100ms
           lambda: |-
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             for (uint8_t i = 0; i < 12; i++) {
               if (i == id(global_led_animation_index) % 12) {
                 it[i] = color;
@@ -620,9 +618,7 @@ light:
           name: "Listening For Command"
           update_interval: 50ms
           lambda: |-
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             for (uint8_t i = 0; i < 12; i++) {
               if (i == id(global_led_animation_index) % 12) {
                 it[i] = color;
@@ -652,9 +648,7 @@ light:
               brightness_step = 0;
               brightness_decreasing = true;
             }
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             for (uint8_t i = 0; i < 12; i++) {
               if (i == id(global_led_animation_index) % 12) {
                 it[i] = color * uint8_t(255/brightness_step_number*(brightness_step_number-brightness_step));
@@ -677,9 +671,7 @@ light:
           update_interval: 50ms
           lambda: |-
             id(global_led_animation_index) = (12 + id(global_led_animation_index) - 1) % 12;
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             for (uint8_t i = 0; i < 12; i++) {
               if (i == (id(global_led_animation_index)) % 12) {
                 it[i] = color;
@@ -704,8 +696,7 @@ light:
             static int8_t index = 0;
             Color muted_color(255, 0, 0);
             auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             for (uint8_t i = 0; i < 12; i++) {
               if ( light_color.get_state() ) {
                 it[i] = color;
@@ -743,9 +734,7 @@ light:
           name: "Volume Display"
           update_interval: 50ms
           lambda: |-
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             Color silenced_color(255, 0, 0);
             auto volume_ratio = 12.0f * id(external_media_player).volume;
             for (uint8_t i = 0; i < 12; i++) {
@@ -763,10 +752,8 @@ light:
           update_interval: 16ms
           lambda: |-
             if (initial_run) {
-              // set voice_assistant_leds light to colors based on led_ring
-              auto led_ring_cv = id(led_ring).current_values;
               auto va_leds_call = id(voice_assistant_leds).make_call();
-              va_leds_call.from_light_color_values(led_ring_cv);
+              va_leds_call.set_rgb(0.6f, 0.15f, 1.0f);
               va_leds_call.set_brightness( min ( max( id(led_ring).current_values.get_brightness() , 0.2f ) + 0.1f , 1.0f ) );
               va_leds_call.set_state(true);
               va_leds_call.perform();
@@ -814,9 +801,7 @@ light:
               brightness_step = 0;
               brightness_decreasing = true;
             }
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             Color muted_color(255, 0, 0);
             for (uint8_t i = 0; i < 12; i++) {
               it[i] = color * uint8_t(255/brightness_step_number*(brightness_step_number-brightness_step));
@@ -837,9 +822,7 @@ light:
           name: "Timer Tick"
           update_interval: 100ms
           lambda: |-
-            auto light_color = id(led_ring).current_values;
-            Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                  light_color.get_blue() * 255);
+            Color color(153, 38, 255);
             Color muted_color(255, 0, 0);
             auto timer_ratio = 12.0f * id(first_active_timer).seconds_left / max(id(first_active_timer).total_seconds , static_cast<uint32_t>(1));
             uint8_t last_led_on = static_cast<uint8_t>(ceil(timer_ratio)) - 1;
@@ -905,9 +888,7 @@ light:
               if (initial_run) {
                 index = 0;
               }
-              auto light_color = id(led_ring).current_values;
-              Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                    light_color.get_blue() * 255);
+              Color color(153, 38, 255);
               if (index <= 6) {
                 for (uint8_t i = 0; i < 12; i++) {
                   if (i == index) {
@@ -928,9 +909,7 @@ light:
               if (initial_run) {
                 index = 0;
               }
-              auto light_color = id(led_ring).current_values;
-              Color color(light_color.get_red() * 255, light_color.get_green() * 255,
-                    light_color.get_blue() * 255);
+              Color color(153, 38, 255);
               if (index <= 6) {
                 for (uint8_t i = 0; i < 12; i++) {
                   if (i == 6 - index) {
