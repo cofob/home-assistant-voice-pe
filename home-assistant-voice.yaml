@@ -956,9 +956,9 @@ light:
     initial_state:
       color_mode: rgb
       brightness: 66%
-      red: 9.4%
-      green: 73.3%
-      blue: 94.9%
+      red: 60%
+      green: 15%
+      blue: 100%
     segments:
       - id: leds_internal
         from: 7
@@ -1115,7 +1115,7 @@ script:
           effect: "Twinkle"
 
   # Script executed during initialization
-  # Blue Twinkle if Wifi is connected, Else solid warm white
+  # Purple Twinkle if Wifi is connected, Else solid warm white
   - id: control_leds_init_state
     then:
       - if:
@@ -1124,9 +1124,9 @@ script:
           then:
             - light.turn_on:
                 brightness: 66%
-                red: 9.4%
-                green: 73.3%
-                blue: 94.9%
+                red: 60%
+                green: 15%
+                blue: 100%
                 id: voice_assistant_leds
                 effect: "Twinkle"
           else:
